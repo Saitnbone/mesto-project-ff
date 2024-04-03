@@ -11,7 +11,7 @@ function creatingCard(link, name) {
     .querySelector(".places__item")
     .cloneNode(true);
   templateElement.querySelector(".card__image").src = link;
-  templateElement.querySelector(".card__image").alt = name;
+  templateElement.querySelector(".card__image").alt = name + " фотокарточка";
   templateElement.querySelector(".card__title").textContent = name;
 
   return templateElement;
