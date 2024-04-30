@@ -1,0 +1,11 @@
+{
+  "name": "project__mesto",
+  "version": "1.0.0",
+  "description": "https://github.com/Saitnbone/mesto-project-ff.git",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
