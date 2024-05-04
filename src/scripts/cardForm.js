@@ -1,5 +1,11 @@
 // Импорты
-import { createCard, likeCard, deleteCard, sectionPlaces } from "./cards";
+import {
+  createCard,
+  likeCard,
+  deleteCard,
+  openImageCard,
+  sectionPlaces,
+} from "./cards";
 import { closePopup } from "./modal";
 
 // @todo: DOM узлы
@@ -14,7 +20,7 @@ const handleAddFormCard = (evt) => {
     name: cardNameInput.value,
     link: cardLinkInput.value,
   };
-  let place = createCard(cardInfo, likeCard, deleteCard);
+  let place = createCard(cardInfo, likeCard, openImageCard, deleteCard);
   sectionPlaces.prepend(place);
   cardForm.reset();
   closePopup(cardForm.closest(".popup"));

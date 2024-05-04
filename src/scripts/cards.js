@@ -7,11 +7,9 @@ const cardTemplate = document.querySelector("#card-template").content;
 // @todo: DOM-узлы
 const content = document.querySelector(".content");
 const sectionPlaces = content.querySelector(".places__list");
-// const image = document.querySelector(".popup__image");
 const popupImage = document.querySelector(".popup_type_image");
 const image = popupImage.querySelector(".popup__image");
 const caption = document.querySelector(".popup__caption");
-// const viewImagePopup = document.querySelector(".popup_type_image");
 
 // @todo: Функция создания карточки
 const createCard = (cardData, likeCard, openImageCard, onDelete) => {
