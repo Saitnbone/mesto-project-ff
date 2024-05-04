@@ -1,23 +1,18 @@
-// // Находим форму в DOM
-// const formElement = // Воспользуйтесь методом querySelector()
-// // Находим поля формы в DOM
-// const nameInput = // Воспользуйтесь инструментом .querySelector()
-// const jobInput = // Воспользуйтесь инструментом .querySelector()
+// @todo: DOM узлы
+const profileSection = document.querySelector(".profile");
+const formElement = document.querySelector(".popup__form");
+const nameInput = formElement.querySelector(".popup__input_type_name");
+const jobInput = formElement.querySelector(".popup__input_type_description");
 
-// // Обработчик «отправки» формы, хотя пока
-// // она никуда отправляться не будет
-// function handleFormSubmit(evt) {
-//     evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-//                                                 // Так мы можем определить свою логику отправки.
-//                                                 // О том, как это делать, расскажем позже.
+// @todo: Функция отправки формы
+const handleFormSubmit = (evt) => {
+  evt.preventDefault();
+  profileSection.querySelector(".profile__title").textContent = nameInput.value;
+  profileSection.querySelector(".profile__description").textContent =
+  jobInput.value;
+}
 
-//     // Получите значение полей jobInput и nameInput из свойства value
+//@todo: Слушатели событий
+formElement.addEventListener("submit", handleFormSubmit);
 
-//     // Выберите элементы, куда должны быть вставлены значения полей
-
-//     // Вставьте новые значения с помощью textContent
-// }
-
-// // Прикрепляем обработчик к форме:
-// // он будет следить за событием “submit” - «отправка»
-// formElement.addEventListener('submit', handleFormSubmit); 
+export { formElement, profileSection };
