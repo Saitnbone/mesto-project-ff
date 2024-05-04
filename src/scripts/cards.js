@@ -1,3 +1,4 @@
+// Импорты
 import initialCards from "./cardsData";
 import { openPopup } from "./modal";
 
@@ -62,4 +63,11 @@ const renderInitialCards = () => {
 renderInitialCards();
 
 export default content;
-export { createCard, likeCard, openImageCard, deleteCard, sectionPlaces };
+export {
+  createCard,
+  renderInitialCards,
+  likeCard,
+  openImageCard,
+  deleteCard,
+  sectionPlaces,
+};

@@ -1,3 +1,4 @@
+// Импорты
 import { closePopup } from "./modal";
 
 // @todo: DOM узлы

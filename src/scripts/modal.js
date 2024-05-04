@@ -1,3 +1,4 @@
+// Импорты
 import content from "./cards";
 
 // @todo: DOM узлы
