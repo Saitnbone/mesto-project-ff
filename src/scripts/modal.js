@@ -5,9 +5,9 @@ export const openPopup = (modal, closePopupEsc) => {
 };
 
 // @todo: Функция закрытия модального окна
-export const closePopup = (modal) => {
+export const closePopup = (modal, closePopupEsc) => {
   if (modal.classList.contains("popup_is-opened")) {
     modal.classList.remove("popup_is-opened");
-    modal.classList.add("popup_is-animated");
+    document.removeaddEventListener("keydown", closePopupEsc);
   }
 };
