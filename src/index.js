@@ -26,7 +26,6 @@ const cardLinkInput = document.querySelector(".popup__input_type_url");
 // @todo: DOM узлы для modal
 const editProfilePopup = document.querySelector(".popup_type_edit");
 const addPhotoPopup = document.querySelector(".popup_type_new-card");
-const popupContents = document.querySelectorAll(".popup__content");
 const editButton = content.querySelector(".profile__edit-button");
 const addButton = content.querySelector(".profile__add-button");
 const closeButtons = document.querySelectorAll(".popup__close");
@@ -34,10 +33,15 @@ const popupsOverlay = document.querySelectorAll(".popup");
 
 // @todo: DOM узлы для profileForm
 const profileSection = document.querySelector(".profile");
+const profileTitle = profileSection.querySelector(".profile__title");
+const profileDescription = profileSection.querySelector(
+  ".profile__description"
+);
 const profileForm = document.querySelector('[name="edit-profile"]');
-const formElement = document.querySelector(".popup__form");
-const nameInput = formElement.querySelector(".popup__input_type_name");
-const jobInput = formElement.querySelector(".popup__input_type_description");
+const profileTitleInput = profileForm.querySelector(".popup__input_type_name");
+const profileDescriptionInput = profileForm.querySelector(
+  ".popup__input_type_description"
+);
 
 // @todo: Добавление класса для анимация для popup
 popupsOverlay.forEach((el) => {
@@ -54,19 +58,18 @@ const handleAddFormCard = (evt) => {
   const place = createCard(cardInfo, likeCard, openImageCard, deleteCard);
   sectionPlaces.prepend(place);
   cardForm.reset();
-  closePopup(editProfilePopup, closePopupEsc);
+  closePopup(addPhotoPopup);
 };
 
+// @todo: Настройка инпутов для формы пользователя
+profileTitleInput.value = profileTitle.textContent;
+profileDescriptionInput.value = profileDescription.textContent;
+
 // @todo: Функция отправки формы пользователя
-const handleFormSubmit = (evt) => {
-  evt.preventDefault();
-  profileSection.querySelector(".profile__title").textContent = nameInput.value;
-  nameInput.placeholder = nameInput.value;
-  profileSection.querySelector(".profile__description").textContent =
-    jobInput.value;
-  jobInput.placeholder = jobInput.value;
-  profileForm.reset();
-  closePopup(addPhotoPopup, closePopupEsc);
+const addProfileInformation = (titleValue, descriptionValue) => {
+  profileTitle.textContent = titleValue;
+  profileDescription.textContent = descriptionValue;
+  closePopup(editProfilePopup);
 };
 
 // @todo: Функция показа изображения карточки
@@ -77,27 +80,15 @@ const openImageCard = (evt) => {
   caption.textContent = cardTitle.textContent;
   image.src = cardImage.src;
   image.alt = cardTitle.alt;
-  openPopup(popupImage, closePopupEsc);
-};
-
-// @todo: Функция закрытия модального окна на кнопку "esc"
-const closePopupEsc = (evt) => {
-  if (evt.key === "Escape") {
-    const openedPopup = document.querySelector(".popup_is-opened");
-    if (openedPopup) {
-      openedPopup.classList.toggle("popup_is-opened");
-    }
-  }
+  openPopup(popupImage);
 };
 
 // @todo: Функция закрытия модального окна через нажатие на оверлей страницы
 const closePopupOverlay = (evt) => {
-  if (
-    evt.target.classList.contains("popup_is-opened") &&
-    ![...popupContents].some((el) => el.contains(evt.target)) &&
-    ![...closeButtons].some((el) => el.contains(evt.target))
-  ) {
-    evt.target.classList.remove("popup_is-opened");
+  if (evt.target.classList.contains("popup_is-opened")) {
+    closePopup(popupImage);
+    closePopup(editProfilePopup);
+    closePopup(addPhotoPopup);
   }
 };
 
@@ -111,7 +102,7 @@ const renderInitialCards = () => {
 
 renderInitialCards();
 
-// @todo: Слушатели событий для cardForm.js
+// @todo: Слушатели событий для cardForm
 cardForm.addEventListener("submit", handleAddFormCard);
 
 // @todo: Слушатели событий для modal.js
@@ -135,4 +126,7 @@ closeButtons.forEach((button) => {
 });
 
 // @todo: Слушатели событий для profileForm
-formElement.addEventListener("submit", handleFormSubmit);
+profileForm.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+  addProfileInformation(profileTitleInput.value, profileDescriptionInput.value);
+});
