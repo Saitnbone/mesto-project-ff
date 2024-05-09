@@ -61,12 +61,18 @@ const handleAddFormCard = (evt) => {
   closePopup(addPhotoPopup);
 };
 
-// @todo: Настройка инпутов для формы пользователя
-profileTitleInput.value = profileTitle.textContent;
-profileDescriptionInput.value = profileDescription.textContent;
+// @todo: Функция заполенения инпутов формы профиля пользователя
+const addInputsInformation = () => {
+  profileTitleInput.value = profileTitle.textContent;
+  profileDescriptionInput.value = profileDescription.textContent;
+  openPopup(editProfilePopup);
+};
 
 // @todo: Функция отправки формы пользователя
-const addProfileInformation = (titleValue, descriptionValue) => {
+const addProfileInformation = (evt) => {
+  evt.preventDefault();
+  const titleValue = profileTitleInput.value;
+  const descriptionValue = profileDescriptionInput.value;
   profileTitle.textContent = titleValue;
   profileDescription.textContent = descriptionValue;
   closePopup(editProfilePopup);
@@ -86,9 +92,7 @@ const openImageCard = (evt) => {
 // @todo: Функция закрытия модального окна через нажатие на оверлей страницы
 const closePopupOverlay = (evt) => {
   if (evt.target.classList.contains("popup_is-opened")) {
-    closePopup(popupImage);
-    closePopup(editProfilePopup);
-    closePopup(addPhotoPopup);
+    closePopup(evt.target);
   }
 };
 
@@ -110,9 +114,7 @@ popupsOverlay.forEach((overlay) => {
   overlay.addEventListener("click", closePopupOverlay);
 });
 
-editButton.addEventListener("click", () => {
-  openPopup(editProfilePopup);
-});
+editButton.addEventListener("click", addInputsInformation);
 
 addButton.addEventListener("click", () => {
   openPopup(addPhotoPopup);
@@ -126,7 +128,4 @@ closeButtons.forEach((button) => {
 });
 
 // @todo: Слушатели событий для profileForm
-profileForm.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  addProfileInformation(profileTitleInput.value, profileDescriptionInput.value);
-});
+profileForm.addEventListener("submit", addProfileInformation);
