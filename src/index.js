@@ -69,7 +69,7 @@ const addInputsInformation = () => {
 };
 
 // @todo: Функция отправки формы пользователя
-const addProfileInformation = (evt) => {
+const submitProfileInformation = (evt) => {
   evt.preventDefault();
   const titleValue = profileTitleInput.value;
   const descriptionValue = profileDescriptionInput.value;
@@ -128,4 +128,4 @@ closeButtons.forEach((button) => {
 });
 
 // @todo: Слушатели событий для profileForm
-profileForm.addEventListener("submit", addProfileInformation);
+profileForm.addEventListener("submit", submitProfileInformation);
