@@ -46,22 +46,26 @@
               class="popup__input popup__input_type_name"
               placeholder="Имя"
               id="name-input"
-              required
               minlength="2"
               maxlength="40"
+              pattern="[a-zA-Zа-яА-ЯёЁ\- ]+"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы."
+              required
             />
-            <span class="popup__input-error name-input-error"></span>
+            <span class="name-input-error"></span>
             <input
               type="text"
               name="description"
               class="popup__input popup__input_type_description"
               placeholder="Занятие"
-              id="career-input"
-              required
+              id="description-input"
               minlength="2"
               maxlength="200"
+              pattern="[a-zA-Zа-яА-ЯёЁ\- ]+"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы."
+              required
             />
-            <span class="popup__input-error career-input-error"></span>
+            <span class="description-input-error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -77,16 +81,24 @@
               type="text"
               name="place-name"
               class="popup__input popup__input_type_card-name"
+              id="place-name-input"
               placeholder="Название"
+              minlength="2"
+              maxlength="30"
+              pattern="[a-zA-Zа-яА-ЯёЁ\- ]+"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы."
               required
             />
+            <span class="place-name-input-error"></span>
             <input
               type="url"
               name="link"
               class="popup__input popup__input_type_url"
+              id="link-input"
               placeholder="Ссылка на картинку"
               required
             />
+            <span class="link-input-error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>

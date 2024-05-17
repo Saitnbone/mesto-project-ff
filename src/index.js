@@ -31,9 +31,6 @@ const editButton = content.querySelector(".profile__edit-button");
 const addButton = content.querySelector(".profile__add-button");
 const closeButtons = document.querySelectorAll(".popup__close");
 const popupsOverlay = document.querySelectorAll(".popup");
-// Все инпуты всех форм на проекте
-// const popupInputs = document.querySelectorAll('.popup__input')
-// const formError = formElement.querySelector(`.${formInput.id}-error`);
 
 // @todo: DOM узлы для profileForm
 const profileSection = document.querySelector(".profile");
@@ -46,7 +43,6 @@ const profileTitleInput = profileForm.querySelector(".popup__input_type_name");
 const profileDescriptionInput = profileForm.querySelector(
   ".popup__input_type_description"
 );
-// const profileFormSubmitButton = profileForm.querySelector(".popup__button");
 
 // @todo: Добавление класса для анимация для popup
 popupsOverlay.forEach((el) => {
@@ -81,34 +77,7 @@ const submitProfileInformation = (evt) => {
   profileTitle.textContent = titleValue;
   profileDescription.textContent = descriptionValue;
   closePopup(editProfilePopup);
-  initializationOfCheck();
 };
-
-// @todo: Функция вывода ошибки валидации
-const showInputError = (input, errorMessage) => {
-  // input.classList.add(".popup__input_error");
-  // errorMessage = formError.textContent;
-};
-
-// @todo: Функция отключения ошибки валидации
-const hideInputError = (input, errorMessage) => {};
-
-// // @todo: Функция проверки валидности инпутов в форме пользователя
-// const checkProfileValidity = () => {
-//   const titleValidity = profileTitleInput.validity.valid;
-//   const descriptionValidity = profileDescriptionInput.validity.valid;
-//   setEventListeners();
-//   if (titleValidity && descriptionValidity) {
-//     profileFormSubmitButton.disable = false;
-//     if (profileFormSubmitButton.classList.contains("popup__button_disable")) {
-//       profileFormSubmitButton.classList.remove("popup__button_disable");
-//     }
-//     hideInputError();
-//   }
-//   showInputError();
-//   profileFormSubmitButton.disable = true;
-//   profileFormSubmitButton.classList.add("popup__button_disable");
-// };
 
 // @todo: Функция показа изображения карточки
 const openImageCard = (evt) => {
@@ -136,15 +105,8 @@ const renderInitialCards = () => {
   });
 };
 
+initializationOfCheck();
 renderInitialCards();
-
-// @todo: Слушатель событий для инпутов формы
-const setEventListeners = () => {
-  const inputList = Array.from(document.querySelectorAll(".popup__input"));
-  inputList.forEach((input) => {
-    input.addEventListener("input", checkProfileValidity);
-  });
-};
 
 // @todo: Слушатели событий для cardForm
 cardForm.addEventListener("submit", handleAddFormCard);
