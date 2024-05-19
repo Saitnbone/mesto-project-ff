@@ -10,7 +10,7 @@ import "./index.css";
 import { initialCards } from "./scripts/cardsData";
 import { createCard, likeCard, deleteCard } from "./scripts/cards";
 import { openPopup, closePopup } from "./scripts/modal";
-import { initializationOfCheck } from "./scripts/validationForms";
+import { enableValidation} from "./scripts/validationForms";
 
 // @todo: DOM узлы для cards.js
 const content = document.querySelector(".content");
@@ -105,7 +105,7 @@ const renderInitialCards = () => {
   });
 };
 
-initializationOfCheck();
+enableValidation();
 renderInitialCards();
 
 // @todo: Слушатели событий для cardForm

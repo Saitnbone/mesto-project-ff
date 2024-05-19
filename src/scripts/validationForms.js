@@ -38,7 +38,7 @@ const setEventListeners = (form) => {
 };
 
 // @todo: Функция инициализации проверки инпутов форм
-export const initializationOfCheck = () => {
+export const enableValidation = () => {
   const formList = Array.from(document.querySelectorAll(".popup__form"));
   formList.forEach((form) => {
     form.addEventListener("submit", (evt) => {
