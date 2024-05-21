@@ -1,52 +1,92 @@
-const showInputError = (form, input, errorValue) => {
-  const error = form.querySelector(`.${input.id}-error`);
-  error.classList.add("popup__input-error_show");
+// @todo: Функция вывода ошибок валидации форм
+const showInputError = (input, errorValue, settingsObject) => {
+  const error = document.querySelector(`.${input.id}-error`);
+  error.classList.add(settingsObject.errorClass);
+  input.classList.add(settingsObject.inputErrorClass);
   error.textContent = errorValue;
 };
 
-const hideInputError = (form, input) => {
-  const error = form.querySelector(`.${input.id}-error`);
-  error.classList.remove("popup__input-error_show");
+// @todo: Функция скрытия ошибок валидации форм
+const hideInputError = (input, settingsObject) => {
+  const error = document.querySelector(`.${input.id}-error`);
+  error.classList.remove(settingsObject.errorClass);
+  input.classList.remove(settingsObject.inputErrorClass);
   error.textContent = "";
   input.setCustomValidity("");
 };
 
 // @todo: Функция проверки валидности инпутов в формах
-const checkProfileValidity = (form, input) => {
-  if (input.validity.patternMismatch) {
-    showInputError(
-      form,
-      input,
-      input.setCustomValidity(input.dataset.errorMessage)
-    );
+const checkValidity = (input, settingsObject) => {
+  if (input.validity.valueMissing) {
+    input.setCustomValidity("Вы пропустили это поле.");
+  } else if (input.validity.typeMismatch) {
+    input.setCustomValidity(input.dataset.typeErrorMessage);
+  } else if (input.validity.patternMismatch) {
+    input.setCustomValidity(input.dataset.errorMessage);
   } else {
-    hideInputError(form, input);
+    input.setCustomValidity("");
   }
+
   if (input.validity.valid) {
-    hideInputError(form, input);
+    hideInputError(input, settingsObject);
   } else {
-    showInputError(form, input, input.validationMessage);
+    showInputError(input, input.validationMessage, settingsObject);
   }
 };
 
 // @todo: Функция добавления слушателей инпутов форм
-const setEventListeners = (form) => {
-  const inputList = Array.from(form.querySelectorAll(".popup__input"));
+const setEventListeners = (form, settingsObject) => {
+  const inputList = Array.from(
+    form.querySelectorAll(settingsObject.inputSelector)
+  );
+  const buttonElement = form.querySelector(settingsObject.submitButtonSelector);
+  toggleButtonsState(inputList, buttonElement, settingsObject);
+
   inputList.forEach((input) => {
-    input.addEventListener("input", () => checkProfileValidity(form, input));
+    input.addEventListener("input", () => {
+      checkValidity(input, settingsObject);
+      toggleButtonsState(inputList, buttonElement, settingsObject);
+    });
   });
 };
 
 // @todo: Функция инициализации проверки инпутов форм
-export const enableValidation = () => {
-  const formList = Array.from(document.querySelectorAll(".popup__form"));
+export const enableValidation = (settingsObject) => {
+  const formList = Array.from(
+    document.querySelectorAll(settingsObject.formSelector)
+  );
   formList.forEach((form) => {
     form.addEventListener("submit", (evt) => {
       evt.preventDefault();
     });
-    setEventListeners(form);
+    setEventListeners(form, settingsObject);
   });
 };
 
 // @todo: Функция очистки валидации форм
-// const clearValidation = () => {};
+export const clearValidation = (form, settingsObject) => {
+  const inputList = Array.from(
+    form.querySelectorAll(settingsObject.inputSelector)
+  );
+  const buttonElement = form.querySelector(settingsObject.submitButtonSelector);
+
+  inputList.forEach((inputElement) => {
+    hideInputError(inputElement, settingsObject);
+  });
+
+  toggleButtonsState(inputList, buttonElement, settingsObject);
+};
+
+// @todo: Функция проверки наличия невалидных инпутов
+const hasInvalidInput = (inputList) => {
+  return inputList.some((inputElement) => !inputElement.validity.valid);
+};
+
+// @todo: Функция переключения состояния кнопок в формах
+const toggleButtonsState = (inputList, buttonElement, settingsObject) => {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add(settingsObject.inactiveButtonClass);
+  } else {
+    buttonElement.classList.remove(settingsObject.inactiveButtonClass);
+  }
+};

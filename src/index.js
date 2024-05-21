@@ -10,7 +10,7 @@ import "./index.css";
 import { initialCards } from "./scripts/cardsData";
 import { createCard, likeCard, deleteCard } from "./scripts/cards";
 import { openPopup, closePopup } from "./scripts/modal";
-import { enableValidation} from "./scripts/validationForms";
+import { enableValidation, clearValidation } from "./scripts/validationForms";
 
 // @todo: DOM узлы для cards.js
 const content = document.querySelector(".content");
@@ -105,9 +105,6 @@ const renderInitialCards = () => {
   });
 };
 
-enableValidation();
-renderInitialCards();
-
 // @todo: Слушатели событий для cardForm
 cardForm.addEventListener("submit", handleAddFormCard);
 
@@ -116,10 +113,14 @@ popupsOverlay.forEach((overlay) => {
   overlay.addEventListener("click", closePopupOverlay);
 });
 
-editButton.addEventListener("click", addInputsInformation);
+editButton.addEventListener("click", () => {
+  addInputsInformation();
+  clearValidation(profileForm, validationConfig);
+});
 
 addButton.addEventListener("click", () => {
   openPopup(addPhotoPopup);
+  clearValidation(cardForm, validationConfig);
 });
 
 closeButtons.forEach((button) => {
@@ -131,3 +132,18 @@ closeButtons.forEach((button) => {
 
 // @todo: Слушатели событий для profileForm
 profileForm.addEventListener("submit", submitProfileInformation);
+
+// @todo: Вызовы функций валидации и очистки инпутов форм
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__input-error_show",
+};
+
+enableValidation(validationConfig);
+
+// @todo: Вызов функции рендеринга карточек сайта
+renderInitialCards();
