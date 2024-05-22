@@ -7,7 +7,7 @@
 import "./index.css";
 
 // @todo: Импорт компонентов для проекта
-import { initialCards } from "./scripts/cardsData";
+import { cardsInformation } from "./scripts/api";
 import { createCard, likeCard, deleteCard } from "./scripts/cards";
 import { openPopup, closePopup } from "./scripts/modal";
 import { enableValidation, clearValidation } from "./scripts/validationForms";
@@ -43,6 +43,16 @@ const profileTitleInput = profileForm.querySelector(".popup__input_type_name");
 const profileDescriptionInput = profileForm.querySelector(
   ".popup__input_type_description"
 );
+
+// @todo: Объект настроек для валидции форм
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__input-error_show",
+};
 
 // @todo: Добавление класса для анимация для popup
 popupsOverlay.forEach((el) => {
@@ -97,13 +107,33 @@ const closePopupOverlay = (evt) => {
   }
 };
 
+// @ todo: Функция инициализации рендеринга карточек
+const inicializationRendering = () => {
+  cardsInformation()
+    .then((cardData) => {
+      renderInitialCards(cardData);
+    })
+    .catch((error) => {
+      console.error("Error fetching cards data:", error);
+    });
+};
+
+// @todo: Вызов функции инициализации рендеринга карточек
+inicializationRendering();
+
 // @todo: Функция вывода карточки на страницу
-const renderInitialCards = () => {
-  initialCards.forEach((element) => {
+const renderInitialCards = (cardData) => {
+  cardData.forEach((element) => {
     const cardItem = createCard(element, likeCard, openImageCard, deleteCard);
     sectionPlaces.append(cardItem);
   });
 };
+
+// @todo: Вызов функции проверки валидации форм
+enableValidation(validationConfig);
+
+// // @todo: Вызов функции рендеринга карточек сайта
+// renderInitialCards();
 
 // @todo: Слушатели событий для cardForm
 cardForm.addEventListener("submit", handleAddFormCard);
@@ -132,18 +162,3 @@ closeButtons.forEach((button) => {
 
 // @todo: Слушатели событий для profileForm
 profileForm.addEventListener("submit", submitProfileInformation);
-
-// @todo: Вызовы функций валидации и очистки инпутов форм
-const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__input-error_show",
-};
-
-enableValidation(validationConfig);
-
-// @todo: Вызов функции рендеринга карточек сайта
-renderInitialCards();
