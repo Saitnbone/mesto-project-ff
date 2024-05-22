@@ -7,7 +7,11 @@
 import "./index.css";
 
 // @todo: Импорт компонентов для проекта
-import { cardsInformation } from "./scripts/api";
+import {
+  getUserInformation,
+  getCardsInformation,
+  addNewCard,
+} from "./scripts/api";
 import { createCard, likeCard, deleteCard } from "./scripts/cards";
 import { openPopup, closePopup } from "./scripts/modal";
 import { enableValidation, clearValidation } from "./scripts/validationForms";
@@ -62,14 +66,33 @@ popupsOverlay.forEach((el) => {
 // @todo: Функция создания новой карточки
 const handleAddFormCard = (evt) => {
   evt.preventDefault();
+
+  const cardName = cardNameInput.value;
+  const cardLink = cardLinkInput.value;
+
   const cardInfo = {
-    name: cardNameInput.value,
-    link: cardLinkInput.value,
+    name: cardName,
+    link: cardLink,
   };
-  const place = createCard(cardInfo, likeCard, openImageCard, deleteCard);
-  sectionPlaces.prepend(place);
-  cardForm.reset();
-  closePopup(addPhotoPopup);
+
+  // Вызов API для добавления новой карточки
+  addNewCard(cardInfo)
+    .then((newCardData) => {
+      if (newCardData) {
+        const place = createCard(
+          newCardData,
+          likeCard,
+          openImageCard,
+          deleteCard
+        );
+        sectionPlaces.prepend(place);
+        cardForm.reset();
+        closePopup(addPhotoPopup);
+      }
+    })
+    .catch((error) => {
+      console.error("Error adding new card:", error);
+    });
 };
 
 // @todo: Функция заполенения инпутов формы профиля пользователя
@@ -109,12 +132,16 @@ const closePopupOverlay = (evt) => {
 
 // @ todo: Функция инициализации рендеринга карточек
 const inicializationRendering = () => {
-  cardsInformation()
-    .then((cardData) => {
-      renderInitialCards(cardData);
+  Promise.all([getUserInformation(), getCardsInformation()])
+    .then(([userData, cardData]) => {
+      if (userData && Array.isArray(cardData)) {
+        renderInitialCards(cardData, userData._id);
+      } else {
+        console.error("Invalid format");
+      }
     })
     .catch((error) => {
-      console.error("Error fetching cards data:", error);
+      console.error("Error cards data :", error);
     });
 };
 
@@ -122,18 +149,21 @@ const inicializationRendering = () => {
 inicializationRendering();
 
 // @todo: Функция вывода карточки на страницу
-const renderInitialCards = (cardData) => {
+const renderInitialCards = (cardData, userId) => {
   cardData.forEach((element) => {
-    const cardItem = createCard(element, likeCard, openImageCard, deleteCard);
+    const cardItem = createCard(
+      element,
+      likeCard,
+      openImageCard,
+      deleteCard,
+      userId
+    );
     sectionPlaces.append(cardItem);
   });
 };
 
 // @todo: Вызов функции проверки валидации форм
 enableValidation(validationConfig);
-
-// // @todo: Вызов функции рендеринга карточек сайта
-// renderInitialCards();
 
 // @todo: Слушатели событий для cardForm
 cardForm.addEventListener("submit", handleAddFormCard);
