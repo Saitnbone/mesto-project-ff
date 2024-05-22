@@ -134,7 +134,7 @@ const closePopupOverlay = (evt) => {
 const inicializationRendering = () => {
   Promise.all([getUserInformation(), getCardsInformation()])
     .then(([userData, cardData]) => {
-      if (userData && Array.isArray(cardData)) {
+      if (userData._id && Array.isArray(cardData)) {
         renderInitialCards(cardData, userData._id);
       } else {
         console.error("Invalid format");
