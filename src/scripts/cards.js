@@ -1,3 +1,5 @@
+import { fetchDeleteCardInformation } from "./api";
+
 // @todo: Функция добавления лайка карточки
 export const likeCard = (evt) => {
   evt.target.classList.toggle("card__like-button_is-active");
@@ -14,6 +16,7 @@ export const createCard = (cardData, likeCard, openImageCard, onDelete) => {
   const cardLink = cardData.link;
   const cardName = cardData.name;
   const likeCounter = cardData.likes.length;
+  const cardId = cardData._id;
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate
     .querySelector(".places__item")
@@ -35,6 +38,17 @@ export const createCard = (cardData, likeCard, openImageCard, onDelete) => {
 
   cardInformation.addEventListener("click", (evt) => openImageCard(evt));
   const deleteButton = cardElement.querySelector(".card__delete-button");
-  deleteButton.addEventListener("click", () => onDelete(cardElement));
+  deleteButton.addEventListener("click", () => {
+    // API-запрос на удаление карточки
+    fetchDeleteCardInformation(cardId)
+      .then((res) => {
+        if (res) {
+          onDelete(cardElement);
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting card:", error);
+      });
+  });
   return cardElement;
 };

@@ -1,5 +1,5 @@
 // @todo: API-запрос для получения данных о пользователе
-export const getUserInformation = () => {
+export const fetchGetUserInformation = () => {
   return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me", {
     method: "GET",
     headers: {
@@ -19,7 +19,7 @@ export const getUserInformation = () => {
 };
 
 // @todo: API-запрос для изменения данных о пользователе
-export const changeProfileInformation = () => {
+export const fetchChangeProfileInformation = () => {
   return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me", {
     method: "PATCH",
     headers: {
@@ -46,10 +46,8 @@ export const changeProfileInformation = () => {
     });
 };
 
-console.log(changeProfileInformation());
-
 // @todo: API-запрос для добавления новой карточки
-export const addNewCard = (newCardData) => {
+export const fetchAddNewCard = (newCardData) => {
   return fetch("https://nomoreparties.co/v1/wff-cohort-14/cards", {
     method: "POST",
     body: JSON.stringify({
@@ -78,8 +76,9 @@ export const addNewCard = (newCardData) => {
 };
 
 // @todo: API-запрос для получения информации о карточках
-export const getCardsInformation = () => {
+export const fetchGetCardsInformation = () => {
   return fetch("https://nomoreparties.co/v1/wff-cohort-14/cards", {
+    method: "GET",
     headers: {
       authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
       "Content-Type": "application/json",
@@ -95,4 +94,29 @@ export const getCardsInformation = () => {
       console.error("Error fetching cards data:", error);
       return [];
     });
+};
+
+// @todo: API-запрос для получения информации о карточках
+export const fetchDeleteCardInformation = (cardId) => {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-14/cards/${cardId}`, {
+    method: "DELETE",
+    headers: {
+      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error, Status is: ${res.status}`);
+      }
+      return res.json();
+    })
+    .catch((error) => {
+      console.error("Error fetching cards data:", error);
+      return null;
+    });
+};
+
+export const fetchAddCardLike = () => {
+  return fetch();
 };

@@ -8,9 +8,9 @@ import "./index.css";
 
 // @todo: Импорт компонентов для проекта
 import {
-  getUserInformation,
-  getCardsInformation,
-  addNewCard,
+  fetchGetUserInformation,
+  fetchGetCardsInformation,
+  fetchAddNewCard,
 } from "./scripts/api";
 import { createCard, likeCard, deleteCard } from "./scripts/cards";
 import { openPopup, closePopup } from "./scripts/modal";
@@ -75,8 +75,8 @@ const handleAddFormCard = (evt) => {
     link: cardLink,
   };
 
-  // Вызов API для добавления новой карточки
-  addNewCard(cardInfo)
+  // Вызов API-запроса для добавления новой карточки
+  fetchAddNewCard(cardInfo)
     .then((newCardData) => {
       if (newCardData) {
         const place = createCard(
@@ -132,7 +132,7 @@ const closePopupOverlay = (evt) => {
 
 // @ todo: Функция инициализации рендеринга карточек
 const inicializationRendering = () => {
-  Promise.all([getUserInformation(), getCardsInformation()])
+  Promise.all([fetchGetUserInformation(), fetchGetCardsInformation()])
     .then(([userData, cardData]) => {
       if (userData._id && Array.isArray(cardData)) {
         renderInitialCards(cardData, userData._id);
