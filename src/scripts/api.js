@@ -1,4 +1,7 @@
-// @todo: API-запрос для получения данных о пользователе
+// @todo: Объект конфигурации для API-запросов
+const config = {};
+
+// @todo: API-запрос для получения собственной информации
 export const fetchGetUserInformation = () => {
   return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me", {
     method: "GET",
@@ -77,23 +80,28 @@ export const fetchAddNewCard = (newCardData) => {
 
 // @todo: API-запрос для получения информации о карточках
 export const fetchGetCardsInformation = () => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-14/cards", {
-    method: "GET",
-    headers: {
-      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error, Status is: ${res.status}`);
-      }
-      return res.json();
+  return (
+    fetch("https://nomoreparties.co/v1/wff-cohort-14/cards", {
+      method: "GET",
+      headers: {
+        authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
+        "Content-Type": "application/json",
+      },
     })
-    .catch((error) => {
-      console.error("Error fetching cards data:", error);
-      return [];
-    });
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error, Status is: ${res.status}`);
+        }
+        return res.json();
+      })
+      // .then((result) => {
+      //   console.log(result);
+      // })
+      .catch((error) => {
+        console.error("Error fetching cards data:", error);
+        return [];
+      })
+  );
 };
 
 // @todo: API-запрос для получения информации о карточках
@@ -117,6 +125,44 @@ export const fetchDeleteCardInformation = (cardId) => {
     });
 };
 
-export const fetchAddCardLike = () => {
-  return fetch();
+// @todo: API-запрос для добавления лайка карточки
+export const fetchAddLike = (cardId) => {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-14/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: {
+      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error, Status is: ${res.status}`);
+      }
+      return res.json();
+    })
+    .catch((error) => {
+      console.error("Error fetching cards data:", error);
+      return null;
+    });
+};
+
+// @todo: API-запрос для удаления лайка карточки
+export const fetchRemoveLike = (cardId) => {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-14/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: {
+      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error, Status is: ${res.status}`);
+      }
+      return res.json();
+    })
+    .catch((error) => {
+      console.error("Error fetching cards data:", error);
+      return null;
+    });
 };
