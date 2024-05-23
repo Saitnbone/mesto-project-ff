@@ -83,7 +83,8 @@ const handleAddFormCard = (evt) => {
           newCardData,
           likeCard,
           openImageCard,
-          deleteCard
+          deleteCard,
+          userData
         );
         sectionPlaces.prepend(place);
         cardForm.reset();
@@ -135,7 +136,7 @@ const inicializationRendering = () => {
   Promise.all([fetchGetUserInformation(), fetchGetCardsInformation()])
     .then(([userData, cardData]) => {
       if (userData._id && Array.isArray(cardData)) {
-        renderInitialCards(cardData, userData._id);
+        renderInitialCards(cardData, userData);
       } else {
         console.error("Invalid format");
       }
@@ -149,14 +150,14 @@ const inicializationRendering = () => {
 inicializationRendering();
 
 // @todo: Функция вывода карточки на страницу
-const renderInitialCards = (cardData, userId) => {
+const renderInitialCards = (cardData, userData) => {
   cardData.forEach((element) => {
     const cardItem = createCard(
       element,
       likeCard,
       openImageCard,
       deleteCard,
-      userId
+      userData
     );
     sectionPlaces.append(cardItem);
   });

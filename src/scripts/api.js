@@ -127,13 +127,16 @@ export const fetchDeleteCardInformation = (cardId) => {
 
 // @todo: API-запрос для добавления лайка карточки
 export const fetchAddLike = (cardId) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-14/cards/likes/${cardId}`, {
-    method: "PUT",
-    headers: {
-      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-      "Content-Type": "application/json",
-    },
-  })
+  return fetch(
+    `https://nomoreparties.co/v1/wff-cohort-14/cards/likes/${cardId}`,
+    {
+      method: "PUT",
+      headers: {
+        authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error, Status is: ${res.status}`);
@@ -148,13 +151,16 @@ export const fetchAddLike = (cardId) => {
 
 // @todo: API-запрос для удаления лайка карточки
 export const fetchRemoveLike = (cardId) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-14/cards/likes/${cardId}`, {
-    method: "DELETE",
-    headers: {
-      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-      "Content-Type": "application/json",
-    },
-  })
+  return fetch(
+    `https://nomoreparties.co/v1/wff-cohort-14/cards/likes/${cardId}`,
+    {
+      method: "DELETE",
+      headers: {
+        authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error, Status is: ${res.status}`);
