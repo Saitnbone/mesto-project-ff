@@ -1,5 +1,15 @@
 // @todo: Объект конфигурации для API-запросов
-const config = {};
+const config = {
+  getMethod: "GET",
+  postMethod: "POST",
+  deleteMethod: "DELETE",
+  patchMethod: "PATCH",
+  baseUrl: "https://nomoreparties.co/v1/wff-cohort-14",
+  headers: {
+    authorization: "c56e30dc-2883-4270-a59e-b2f7bae969c6",
+    "Content-Type": "application/json",
+  },
+};
 
 // @todo: API-запрос для получения собственной информации
 export const fetchGetUserInformation = () => {
@@ -22,7 +32,7 @@ export const fetchGetUserInformation = () => {
 };
 
 // @todo: API-запрос для изменения данных о пользователе
-export const fetchChangeProfileInformation = () => {
+export const fetchUpdateProfileInformation = () => {
   return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me", {
     method: "PATCH",
     headers: {
@@ -161,6 +171,29 @@ export const fetchRemoveLike = (cardId) => {
       },
     }
   )
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error, Status is: ${res.status}`);
+      }
+      return res.json();
+    })
+    .catch((error) => {
+      console.error("Error fetching cards data:", error);
+      return null;
+    });
+};
+
+export const fetchProfileAvatar = (image) => {
+  return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me/avatar ", {
+    method: "PATCH",
+    headers: {
+      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      avatar: image.link,
+    }),
+  })
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error, Status is: ${res.status}`);

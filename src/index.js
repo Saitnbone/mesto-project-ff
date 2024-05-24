@@ -11,6 +11,7 @@ import {
   fetchGetUserInformation,
   fetchGetCardsInformation,
   fetchAddNewCard,
+  fetchUpdateProfileInformation
 } from "./scripts/api";
 import { createCard, likeCard, deleteCard } from "./scripts/cards";
 import { openPopup, closePopup } from "./scripts/modal";
@@ -35,6 +36,12 @@ const editButton = content.querySelector(".profile__edit-button");
 const addButton = content.querySelector(".profile__add-button");
 const closeButtons = document.querySelectorAll(".popup__close");
 const popupsOverlay = document.querySelectorAll(".popup");
+
+// @todo: DOM узлы для блока с аватаром
+const avatarBlock = document.querySelector(".profile__image-block");
+const userAvatar = avatarBlock.querySelector('.profile__image');
+const avatarPopup = document.querySelector(".popup_type_edit-avatar");
+const avatarForm = document.querySelector('[name="edit-avatar"]');
 
 // @todo: DOM узлы для profileForm
 const profileSection = document.querySelector(".profile");
@@ -83,8 +90,7 @@ const handleAddFormCard = (evt) => {
           newCardData,
           likeCard,
           openImageCard,
-          deleteCard,
-          userData
+          deleteCard
         );
         sectionPlaces.prepend(place);
         cardForm.reset();
@@ -137,6 +143,7 @@ const inicializationRendering = () => {
     .then(([userData, cardData]) => {
       if (userData._id && Array.isArray(cardData)) {
         renderInitialCards(cardData, userData);
+        renderingProfile(userData);
       } else {
         console.error("Invalid format");
       }
@@ -146,8 +153,23 @@ const inicializationRendering = () => {
     });
 };
 
+
 // @todo: Вызов функции инициализации рендеринга карточек
 inicializationRendering();
+
+// @todo: Функция рендеринга информации о пользователе
+const renderingProfile = (userData) => {
+  profileTitle.textContent = userData.name;
+  profileDescription.textContent = userData.about;
+};
+
+// @todo: Функция обновления аватара пользователя 
+// const updateUserAvatar = () => { 
+//   fetchUpdateProfileInformation()  
+//     .then((userAvatar)) =>{
+      
+//     }
+//   }
 
 // @todo: Функция вывода карточки на страницу
 const renderInitialCards = (cardData, userData) => {
@@ -163,6 +185,7 @@ const renderInitialCards = (cardData, userData) => {
   });
 };
 
+
 // @todo: Вызов функции проверки валидации форм
 enableValidation(validationConfig);
 
@@ -172,6 +195,11 @@ cardForm.addEventListener("submit", handleAddFormCard);
 // @todo: Слушатели событий для modal.js
 popupsOverlay.forEach((overlay) => {
   overlay.addEventListener("click", closePopupOverlay);
+});
+
+avatarBlock.addEventListener("click", () => {
+  openPopup(avatarPopup);
+  clearValidation(avatarForm, validationConfig);
 });
 
 editButton.addEventListener("click", () => {
