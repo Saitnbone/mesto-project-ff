@@ -11,7 +11,7 @@ import {
   fetchGetUserInformation,
   fetchGetCardsInformation,
   fetchAddNewCard,
-  fetchUpdateProfileInformation
+  fetchUpdateProfileInformation,
 } from "./scripts/api";
 import { createCard, likeCard, deleteCard } from "./scripts/cards";
 import { openPopup, closePopup } from "./scripts/modal";
@@ -39,7 +39,7 @@ const popupsOverlay = document.querySelectorAll(".popup");
 
 // @todo: DOM узлы для блока с аватаром
 const avatarBlock = document.querySelector(".profile__image-block");
-const userAvatar = avatarBlock.querySelector('.profile__image');
+const userAvatar = avatarBlock.querySelector(".profile__image");
 const avatarPopup = document.querySelector(".popup_type_edit-avatar");
 const avatarForm = document.querySelector('[name="edit-avatar"]');
 
@@ -103,6 +103,7 @@ const handleAddFormCard = (evt) => {
 };
 
 // @todo: Функция заполенения инпутов формы профиля пользователя
+// при открытии формы
 const addInputsInformation = () => {
   profileTitleInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
@@ -116,6 +117,14 @@ const submitProfileInformation = (evt) => {
   const descriptionValue = profileDescriptionInput.value;
   profileTitle.textContent = titleValue;
   profileDescription.textContent = descriptionValue;
+
+  const updatedUserInformation = {
+    name: titleValue,
+    about: descriptionValue,
+  };
+
+  // API-вызов для отправки обновленной информации о пользователе
+  fetchUpdateProfileInformation(updatedUserInformation);
   closePopup(editProfilePopup);
 };
 
@@ -153,7 +162,6 @@ const inicializationRendering = () => {
     });
 };
 
-
 // @todo: Вызов функции инициализации рендеринга карточек
 inicializationRendering();
 
@@ -163,11 +171,11 @@ const renderingProfile = (userData) => {
   profileDescription.textContent = userData.about;
 };
 
-// @todo: Функция обновления аватара пользователя 
-// const updateUserAvatar = () => { 
-//   fetchUpdateProfileInformation()  
+// @todo: Функция обновления аватара пользователя
+// const updateUserAvatar = () => {
+//   fetchUpdateProfileInformation()
 //     .then((userAvatar)) =>{
-      
+
 //     }
 //   }
 
@@ -185,7 +193,6 @@ const renderInitialCards = (cardData, userData) => {
   });
 };
 
-
 // @todo: Вызов функции проверки валидации форм
 enableValidation(validationConfig);
 
@@ -200,6 +207,9 @@ popupsOverlay.forEach((overlay) => {
 avatarBlock.addEventListener("click", () => {
   openPopup(avatarPopup);
   clearValidation(avatarForm, validationConfig);
+
+  // fetchUpdateProfileInformation()
+  // .then(updateAvatar)
 });
 
 editButton.addEventListener("click", () => {

@@ -32,7 +32,7 @@ export const fetchGetUserInformation = () => {
 };
 
 // @todo: API-запрос для изменения данных о пользователе
-export const fetchUpdateProfileInformation = () => {
+export const fetchUpdateProfileInformation = (updatedInformation) => {
   return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me", {
     method: "PATCH",
     headers: {
@@ -40,8 +40,8 @@ export const fetchUpdateProfileInformation = () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name: "Marie Skłodowska Curie",
-      about: "Physicist and Chemist",
+      name: updatedInformation.name,
+      about: updatedInformation.about,
     }),
   })
     .then((res) => {
@@ -63,14 +63,14 @@ export const fetchUpdateProfileInformation = () => {
 export const fetchAddNewCard = (newCardData) => {
   return fetch("https://nomoreparties.co/v1/wff-cohort-14/cards", {
     method: "POST",
-    body: JSON.stringify({
-      name: newCardData.name,
-      link: newCardData.link,
-    }),
     headers: {
       authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      name: newCardData.name,
+      link: newCardData.link,
+    }),
   })
     .then((res) => {
       if (!res.ok) {
