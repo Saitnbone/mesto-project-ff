@@ -12,6 +12,7 @@ import {
   fetchGetCardsInformation,
   fetchAddNewCard,
   fetchUpdateProfileInformation,
+  fetchUpdateUserAvatar,
 } from "./scripts/api";
 import { createCard, likeCard, deleteCard } from "./scripts/cards";
 import { openPopup, closePopup } from "./scripts/modal";
@@ -40,6 +41,7 @@ const popupsOverlay = document.querySelectorAll(".popup");
 // @todo: DOM узлы для блока с аватаром
 const avatarBlock = document.querySelector(".profile__image-block");
 const userAvatar = avatarBlock.querySelector(".profile__image");
+const avatarFormInput = document.querySelector("#link-avatar");
 const avatarPopup = document.querySelector(".popup_type_edit-avatar");
 const avatarForm = document.querySelector('[name="edit-avatar"]');
 
@@ -102,8 +104,9 @@ const handleAddFormCard = (evt) => {
     });
 };
 
-// @todo: Функция заполенения инпутов формы профиля пользователя
-// при открытии формы
+/* @todo: Функция заполенения инпутов формы профиля пользователя
+ при открытии формы
+*/
 const addInputsInformation = () => {
   profileTitleInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
@@ -118,6 +121,7 @@ const submitProfileInformation = (evt) => {
   profileTitle.textContent = titleValue;
   profileDescription.textContent = descriptionValue;
 
+  // Объект обновленной информации о пользователе
   const updatedUserInformation = {
     name: titleValue,
     about: descriptionValue,
@@ -172,12 +176,22 @@ const renderingProfile = (userData) => {
 };
 
 // @todo: Функция обновления аватара пользователя
-// const updateUserAvatar = () => {
-//   fetchUpdateProfileInformation()
-//     .then((userAvatar)) =>{
+const updateUserAvatar = (evt) => {
+  evt.preventDefault();
+  const updatedAvatarLink = avatarFormInput.value.trim();
 
-//     }
-//   }
+  fetchUpdateUserAvatar(updatedAvatarLink)
+    .then((userData) => {
+      if (userData) {
+        userAvatar.src = userData.avatar;
+        avatarForm.reset();
+        closePopup(avatarPopup);
+      }
+    })
+    .catch((error) => {
+      console.error("Error updating user avatar:", error);
+    });
+};
 
 // @todo: Функция вывода карточки на страницу
 const renderInitialCards = (cardData, userData) => {
@@ -196,20 +210,20 @@ const renderInitialCards = (cardData, userData) => {
 // @todo: Вызов функции проверки валидации форм
 enableValidation(validationConfig);
 
+// @todo: Слушатели событий для формы с аватаром пользователя
+avatarBlock.addEventListener("click", () => {
+  openPopup(avatarPopup);
+  clearValidation(avatarForm, validationConfig);
+});
+
+avatarForm.addEventListener("submit", updateUserAvatar);
+
 // @todo: Слушатели событий для cardForm
 cardForm.addEventListener("submit", handleAddFormCard);
 
 // @todo: Слушатели событий для modal.js
 popupsOverlay.forEach((overlay) => {
   overlay.addEventListener("click", closePopupOverlay);
-});
-
-avatarBlock.addEventListener("click", () => {
-  openPopup(avatarPopup);
-  clearValidation(avatarForm, validationConfig);
-
-  // fetchUpdateProfileInformation()
-  // .then(updateAvatar)
 });
 
 editButton.addEventListener("click", () => {

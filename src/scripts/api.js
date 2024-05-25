@@ -183,15 +183,15 @@ export const fetchRemoveLike = (cardId) => {
     });
 };
 
-export const fetchProfileAvatar = (image) => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me/avatar ", {
+export const fetchUpdateUserAvatar = (image) => {
+  return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me/avatar", {
     method: "PATCH",
     headers: {
       authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      avatar: image.link,
+      avatar: image,
     }),
   })
     .then((res) => {
