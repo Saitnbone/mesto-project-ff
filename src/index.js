@@ -23,7 +23,6 @@ import { enableValidation, clearValidation } from "./scripts/validationForms";
 const cardForm = document.querySelector('[name="new-place"]');
 const avatarForm = document.querySelector('[name="edit-avatar"]');
 const profileForm = document.querySelector('[name="edit-profile"]');
-const formButton = document.querySelector(".popup__button");
 
 // @todo: DOM узлы для cards.js
 const content = document.querySelector(".content");
@@ -61,7 +60,7 @@ const profileDescriptionInput = profileForm.querySelector(
   ".popup__input_type_description"
 );
 
-// @todo: Объект настроек для валидции форм
+// @todo: Объект настроек для валидации форм
 const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
@@ -71,7 +70,7 @@ const validationConfig = {
   errorClass: "popup__input-error_show",
 };
 
-// @todo: Добавление класса для анимация для popup
+// @todo: Добавление класса анимация для popup
 popupsOverlay.forEach((el) => {
   el.classList.add("popup_is-animated");
 });
@@ -163,6 +162,29 @@ const closePopupOverlay = (evt) => {
   }
 };
 
+// @todo: Функция обновления аватара пользователя
+const updateUserAvatar = (evt) => {
+  evt.preventDefault();
+  const avatarFormbutton = avatarForm.querySelector(".popup__button");
+  renderLoading(true, avatarFormbutton);
+  const updatedAvatarLink = avatarFormInput.value.trim();
+
+  fetchUpdateUserAvatar(updatedAvatarLink)
+    .then((userData) => {
+      if (userData) {
+        userAvatar.src = userData.avatar;
+        avatarForm.reset();
+        closePopup(avatarPopup);
+      }
+    })
+    .catch((error) => {
+      console.error("Error updating user avatar:", error);
+    })
+    .finally(() => {
+      renderLoading(false, avatarFormbutton);
+    });
+};
+
 // @ todo: Функция инициализации рендеринга карточек
 const inicializationRendering = () => {
   Promise.all([fetchGetUserInformation(), fetchGetCardsInformation()])
@@ -194,30 +216,7 @@ const renderingProfile = (userData) => {
   profileDescription.textContent = userData.about;
 };
 
-// @todo: Функция обновления аватара пользователя
-const updateUserAvatar = (evt) => {
-  evt.preventDefault();
-  const avatarFormbutton = avatarForm.querySelector(".popup__button");
-  renderLoading(true, avatarFormbutton);
-  const updatedAvatarLink = avatarFormInput.value.trim();
-
-  fetchUpdateUserAvatar(updatedAvatarLink)
-    .then((userData) => {
-      if (userData) {
-        userAvatar.src = userData.avatar;
-        avatarForm.reset();
-        closePopup(avatarPopup);
-      }
-    })
-    .catch((error) => {
-      console.error("Error updating user avatar:", error);
-    })
-    .finally(() => {
-      renderLoading(false, avatarFormbutton);
-    });
-};
-
-// @todo: Функция изменения статуса кнопки при отправке результата
+// @todo: Функция изменения статуса кнопки в формах при отправке результата
 const renderLoading = (isLoading, button) => {
   if (isLoading) {
     button.textContent = "Сохранение...";

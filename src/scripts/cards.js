@@ -8,7 +8,7 @@ import {
 // @todo: Функция добавления лайка карточки
 export const likeCard = (evt, cardElement, cardId, cardData, userData) => {
   const like = evt.target;
-  const likeCounter = cardElement.querySelector(".card__like-button-counter");
+  const likeCounts = cardElement.querySelector(".card__like-button-counter");
   const checkLikeStatus = cardData.likes.some(
     (user) => user._id === userData._id
   );
@@ -20,7 +20,7 @@ export const likeCard = (evt, cardElement, cardId, cardData, userData) => {
     .then((updateStatusLike) => {
       cardData.likes = updateStatusLike.likes;
       like.classList.toggle("card__like-button_is-active");
-      likeCounter.textContent = updateStatusLike.likes.length;
+      likeCounts.textContent = updateStatusLike.likes.length;
     })
     .catch((error) => {
       console.error("Error processing likes : ", error);
