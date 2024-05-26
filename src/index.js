@@ -157,6 +157,7 @@ const inicializationRendering = () => {
       if (userData._id && Array.isArray(cardData)) {
         renderInitialCards(cardData, userData);
         renderingProfile(userData);
+        renderingUserAvatar(userData);
       } else {
         console.error("Invalid format");
       }
@@ -168,6 +169,11 @@ const inicializationRendering = () => {
 
 // @todo: Вызов функции инициализации рендеринга карточек
 inicializationRendering();
+
+// @todo: Функция рендеринга аватара пользователя
+const renderingUserAvatar = (userData) => {
+  userAvatar.src = userData.avatar;
+};
 
 // @todo: Функция рендеринга информации о пользователе
 const renderingProfile = (userData) => {
