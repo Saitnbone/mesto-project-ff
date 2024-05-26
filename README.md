@@ -16,6 +16,7 @@
 - **JavaScript**
 
 ## Github Pages
+https://saitnbone.github.io/mesto-project-ff/
 
 ## Ссылка проекта
 https://github.com/Saitnbone/mesto-project-ff.git
