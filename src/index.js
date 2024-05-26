@@ -19,6 +19,7 @@ import { openPopup, closePopup } from "./scripts/modal";
 import { enableValidation, clearValidation } from "./scripts/validationForms";
 
 // @todo: DOM узлы для форм
+// const forms = document.querySelectorAll(".popup__form");
 const cardForm = document.querySelector('[name="new-place"]');
 const avatarForm = document.querySelector('[name="edit-avatar"]');
 const profileForm = document.querySelector('[name="edit-profile"]');
