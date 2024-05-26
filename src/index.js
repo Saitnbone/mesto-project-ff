@@ -18,6 +18,12 @@ import { createCard, likeCard, deleteCard } from "./scripts/cards";
 import { openPopup, closePopup } from "./scripts/modal";
 import { enableValidation, clearValidation } from "./scripts/validationForms";
 
+// @todo: DOM узлы для форм
+const cardForm = document.querySelector('[name="new-place"]');
+const avatarForm = document.querySelector('[name="edit-avatar"]');
+const profileForm = document.querySelector('[name="edit-profile"]');
+const formButton = document.querySelector(".popup__button");
+
 // @todo: DOM узлы для cards.js
 const content = document.querySelector(".content");
 const sectionPlaces = content.querySelector(".places__list");
@@ -26,7 +32,6 @@ const image = popupImage.querySelector(".popup__image");
 const caption = document.querySelector(".popup__caption");
 
 // @todo: DOM узлы для cardForm
-const cardForm = document.querySelector('[name="new-place"]');
 const cardNameInput = document.querySelector(".popup__input_type_card-name");
 const cardLinkInput = document.querySelector(".popup__input_type_url");
 
@@ -43,7 +48,6 @@ const avatarBlock = document.querySelector(".profile__image-block");
 const userAvatar = avatarBlock.querySelector(".profile__image");
 const avatarFormInput = document.querySelector("#link-avatar");
 const avatarPopup = document.querySelector(".popup_type_edit-avatar");
-const avatarForm = document.querySelector('[name="edit-avatar"]');
 
 // @todo: DOM узлы для profileForm
 const profileSection = document.querySelector(".profile");
@@ -51,7 +55,6 @@ const profileTitle = profileSection.querySelector(".profile__title");
 const profileDescription = profileSection.querySelector(
   ".profile__description"
 );
-const profileForm = document.querySelector('[name="edit-profile"]');
 const profileTitleInput = profileForm.querySelector(".popup__input_type_name");
 const profileDescriptionInput = profileForm.querySelector(
   ".popup__input_type_description"
@@ -75,6 +78,8 @@ popupsOverlay.forEach((el) => {
 // @todo: Функция создания новой карточки
 const handleAddFormCard = (evt) => {
   evt.preventDefault();
+  const cardButton = cardForm.querySelector(".popup__button");
+  renderLoading(true, cardButton);
 
   const cardName = cardNameInput.value;
   const cardLink = cardLinkInput.value;
@@ -101,6 +106,9 @@ const handleAddFormCard = (evt) => {
     })
     .catch((error) => {
       console.error("Error adding new card:", error);
+    })
+    .finally(() => {
+      renderLoading(false, cardButton);
     });
 };
 
@@ -116,10 +124,12 @@ const addInputsInformation = () => {
 // @todo: Функция отправки формы пользователя
 const submitProfileInformation = (evt) => {
   evt.preventDefault();
+  const profileButton = profileForm.querySelector(".popup__button");
   const titleValue = profileTitleInput.value;
   const descriptionValue = profileDescriptionInput.value;
   profileTitle.textContent = titleValue;
   profileDescription.textContent = descriptionValue;
+  renderLoading(true, profileButton);
 
   // Объект обновленной информации о пользователе
   const updatedUserInformation = {
@@ -128,7 +138,9 @@ const submitProfileInformation = (evt) => {
   };
 
   // API-вызов для отправки обновленной информации о пользователе
-  fetchUpdateProfileInformation(updatedUserInformation);
+  fetchUpdateProfileInformation(updatedUserInformation).finally(() => {
+    renderLoading(false, profileButton);
+  });
   closePopup(editProfilePopup);
 };
 
@@ -184,6 +196,8 @@ const renderingProfile = (userData) => {
 // @todo: Функция обновления аватара пользователя
 const updateUserAvatar = (evt) => {
   evt.preventDefault();
+  const avatarFormbutton = avatarForm.querySelector(".popup__button");
+  renderLoading(true, avatarFormbutton);
   const updatedAvatarLink = avatarFormInput.value.trim();
 
   fetchUpdateUserAvatar(updatedAvatarLink)
@@ -196,7 +210,19 @@ const updateUserAvatar = (evt) => {
     })
     .catch((error) => {
       console.error("Error updating user avatar:", error);
+    })
+    .finally(() => {
+      renderLoading(false, avatarFormbutton);
     });
+};
+
+// @todo: Функция изменения статуса кнопки при отправке результата
+const renderLoading = (isLoading, button) => {
+  if (isLoading) {
+    button.textContent = "Сохранение...";
+  } else {
+    button.textContent = "Сохранить";
+  }
 };
 
 // @todo: Функция вывода карточки на страницу
