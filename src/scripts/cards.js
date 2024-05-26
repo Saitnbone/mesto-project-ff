@@ -39,10 +39,10 @@ const checkUserRole = (otherUsers, closeButton) => {
   // API-вызов для проверки роли пользователя
   fetchGetUserInformation()
     .then((mainUserInformation) => {
-      if (mainUserInformation && mainUserInformation._id !== otherOwners) {
-        closeButton.classList.add("card__delete-button_hide");
+      if (mainUserInformation && mainUserInformation._id === otherOwners) {
+        closeButton.classList.add("card__delete-button_show");
       } else {
-        closeButton.classList.remove("card__delete-button_hide");
+        closeButton.classList.remove("card__delete-button_show");
       }
     })
     .catch((error) => {

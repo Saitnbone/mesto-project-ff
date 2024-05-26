@@ -4,17 +4,18 @@ const config = {
   postMethod: "POST",
   deleteMethod: "DELETE",
   patchMethod: "PATCH",
+  putMethod: "PUT",
   baseUrl: "https://nomoreparties.co/v1/wff-cohort-14",
   headers: {
-    authorization: "c56e30dc-2883-4270-a59e-b2f7bae969c6",
+    authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
     "Content-Type": "application/json",
   },
 };
 
 // @todo: API-запрос для получения собственной информации
 export const fetchGetUserInformation = () => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me", {
-    method: "GET",
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: config.getMethod,
     headers: {
       authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
     },
@@ -33,12 +34,9 @@ export const fetchGetUserInformation = () => {
 
 // @todo: API-запрос для изменения данных о пользователе
 export const fetchUpdateProfileInformation = (updatedInformation) => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me", {
-    method: "PATCH",
-    headers: {
-      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-      "Content-Type": "application/json",
-    },
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: config.patchMethod,
+    headers: config.headers,
     body: JSON.stringify({
       name: updatedInformation.name,
       about: updatedInformation.about,
@@ -61,12 +59,9 @@ export const fetchUpdateProfileInformation = (updatedInformation) => {
 
 // @todo: API-запрос для добавления новой карточки
 export const fetchAddNewCard = (newCardData) => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-14/cards", {
-    method: "POST",
-    headers: {
-      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-      "Content-Type": "application/json",
-    },
+  return fetch(`${config.baseUrl}/cards`, {
+    method: config.postMethod,
+    headers: config.headers,
     body: JSON.stringify({
       name: newCardData.name,
       link: newCardData.link,
@@ -90,38 +85,27 @@ export const fetchAddNewCard = (newCardData) => {
 
 // @todo: API-запрос для получения информации о карточках
 export const fetchGetCardsInformation = () => {
-  return (
-    fetch("https://nomoreparties.co/v1/wff-cohort-14/cards", {
-      method: "GET",
-      headers: {
-        authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-        "Content-Type": "application/json",
-      },
+  return fetch(`${config.baseUrl}/cards`, {
+    method: config.getMethod,
+    headers: config.headers,
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error, Status is: ${res.status}`);
+      }
+      return res.json();
     })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error, Status is: ${res.status}`);
-        }
-        return res.json();
-      })
-      // .then((result) => {
-      //   console.log(result);
-      // })
-      .catch((error) => {
-        console.error("Error fetching cards data:", error);
-        return [];
-      })
-  );
+    .catch((error) => {
+      console.error("Error fetching cards data:", error);
+      return [];
+    });
 };
 
 // @todo: API-запрос для получения информации о карточках
 export const fetchDeleteCardInformation = (cardId) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-14/cards/${cardId}`, {
-    method: "DELETE",
-    headers: {
-      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-      "Content-Type": "application/json",
-    },
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: config.deleteMethod,
+    headers: config.headers,
   })
     .then((res) => {
       if (!res.ok) {
@@ -137,16 +121,10 @@ export const fetchDeleteCardInformation = (cardId) => {
 
 // @todo: API-запрос для добавления лайка карточки
 export const fetchAddLike = (cardId) => {
-  return fetch(
-    `https://nomoreparties.co/v1/wff-cohort-14/cards/likes/${cardId}`,
-    {
-      method: "PUT",
-      headers: {
-        authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: config.putMethod,
+    headers: config.headers,
+  })
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error, Status is: ${res.status}`);
@@ -161,16 +139,10 @@ export const fetchAddLike = (cardId) => {
 
 // @todo: API-запрос для удаления лайка карточки
 export const fetchRemoveLike = (cardId) => {
-  return fetch(
-    `https://nomoreparties.co/v1/wff-cohort-14/cards/likes/${cardId}`,
-    {
-      method: "DELETE",
-      headers: {
-        authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: config.deleteMethod,
+    headers: config.headers,
+  })
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error, Status is: ${res.status}`);
@@ -184,12 +156,9 @@ export const fetchRemoveLike = (cardId) => {
 };
 
 export const fetchUpdateUserAvatar = (image) => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-14/users/me/avatar", {
-    method: "PATCH",
-    headers: {
-      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
-      "Content-Type": "application/json",
-    },
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: config.patchMethod,
+    headers: config.headers,
     body: JSON.stringify({
       avatar: image,
     }),
