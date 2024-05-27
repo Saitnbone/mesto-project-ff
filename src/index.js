@@ -14,12 +14,11 @@ import {
   fetchUpdateProfileInformation,
   fetchUpdateUserAvatar,
 } from "./scripts/api";
-import { createCard, likeCard, deleteCard } from "./scripts/cards";
+import { createCard, likeCard, deleteCard } from "./scripts/card";
 import { openPopup, closePopup } from "./scripts/modal";
 import { enableValidation, clearValidation } from "./scripts/validationForms";
 
 // @todo: DOM узлы для форм
-// const forms = document.querySelectorAll(".popup__form");
 const cardForm = document.querySelector('[name="new-place"]');
 const avatarForm = document.querySelector('[name="edit-avatar"]');
 const profileForm = document.querySelector('[name="edit-profile"]');
@@ -218,11 +217,7 @@ const renderingProfile = (userData) => {
 
 // @todo: Функция изменения статуса кнопки в формах при отправке результата
 const renderLoading = (isLoading, button) => {
-  if (isLoading) {
-    button.textContent = "Сохранение...";
-  } else {
-    button.textContent = "Сохранить";
-  }
+  button.textContent = isLoading ? "Сохранение..." : "Сохранить";
 };
 
 // @todo: Функция вывода карточки на страницу

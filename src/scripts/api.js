@@ -10,6 +10,12 @@ const config = {
     authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
     "Content-Type": "application/json",
   },
+  handleResponse: function (res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Error ${res.status}`);
+  },
 };
 
 // @todo: API-запрос для получения собственной информации
@@ -17,19 +23,9 @@ export const fetchGetUserInformation = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: config.getMethod,
     headers: {
-      authorization: "33599029-0076-4e00-ad12-21cae39d69c9",
+      authorization: config.headers.authorization,
     },
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error, Status is: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-      return null;
-    });
+  }).then(config.handleResponse);
 };
 
 // @todo: API-запрос для изменения данных о пользователе
@@ -41,20 +37,7 @@ export const fetchUpdateProfileInformation = (updatedInformation) => {
       name: updatedInformation.name,
       about: updatedInformation.about,
     }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error, Status is: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-      return null;
-    });
+  }).then(config.handleResponse);
 };
 
 // @todo: API-запрос для добавления новой карточки
@@ -66,21 +49,7 @@ export const fetchAddNewCard = (newCardData) => {
       name: newCardData.name,
       link: newCardData.link,
     }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error, Status is: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then((cardData) => {
-      console.log("Card added successfully:", cardData);
-      return cardData;
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-      return null;
-    });
+  }).then(config.handleResponse);
 };
 
 // @todo: API-запрос для получения информации о карточках
@@ -88,17 +57,7 @@ export const fetchGetCardsInformation = () => {
   return fetch(`${config.baseUrl}/cards`, {
     method: config.getMethod,
     headers: config.headers,
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error, Status is: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch((error) => {
-      console.error("Error fetching cards data:", error);
-      return [];
-    });
+  }).then(config.handleResponse);
 };
 
 // @todo: API-запрос для получения информации о карточках
@@ -106,17 +65,7 @@ export const fetchDeleteCardInformation = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: config.deleteMethod,
     headers: config.headers,
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error, Status is: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch((error) => {
-      console.error("Error fetching cards data:", error);
-      return null;
-    });
+  }).then(config.handleResponse);
 };
 
 // @todo: API-запрос для добавления лайка карточки
@@ -124,17 +73,7 @@ export const fetchAddLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: config.putMethod,
     headers: config.headers,
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error, Status is: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch((error) => {
-      console.error("Error fetching cards data:", error);
-      return null;
-    });
+  }).then(config.handleResponse);
 };
 
 // @todo: API-запрос для удаления лайка карточки
@@ -142,17 +81,7 @@ export const fetchRemoveLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: config.deleteMethod,
     headers: config.headers,
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error, Status is: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch((error) => {
-      console.error("Error fetching cards data:", error);
-      return null;
-    });
+  }).then(config.handleResponse);
 };
 
 export const fetchUpdateUserAvatar = (image) => {
@@ -162,15 +91,5 @@ export const fetchUpdateUserAvatar = (image) => {
     body: JSON.stringify({
       avatar: image,
     }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error, Status is: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch((error) => {
-      console.error("Error fetching cards data:", error);
-      return null;
-    });
+  }).then(config.handleResponse);
 };
