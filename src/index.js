@@ -91,11 +91,7 @@ const handleAddFormCard = (evt) => {
   Promise.all([fetchGetUserInformation(), fetchAddNewCard(cardInfo)])
     .then(([userData, newCardData]) => {
       if (userData._id && newCardData) {
-        const place = createCard(
-          newCardData,
-          openImageCard,
-          userData
-        );
+        const place = createCard(newCardData, openImageCard, userData);
         sectionPlaces.prepend(place);
         cardForm.reset();
         closePopup(addPhotoPopup);
@@ -113,7 +109,9 @@ const handleAddFormCard = (evt) => {
 const addInputsProfileForm = () => {
   profileTitleInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
+
   openPopup(editProfilePopup);
+  enableValidation(validationConfig);
 };
 
 // Функция отправки формы пользователя
