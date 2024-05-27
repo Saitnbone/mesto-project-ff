@@ -14,7 +14,7 @@ import {
   fetchUpdateProfileInformation,
   fetchUpdateUserAvatar,
 } from "./scripts/api";
-import { createCard, likeCard, deleteCard } from "./scripts/card";
+import { createCard, likeCard } from "./scripts/card";
 import { openPopup, closePopup } from "./scripts/modal";
 import { enableValidation, clearValidation } from "./scripts/validationForms";
 
@@ -82,21 +82,20 @@ const handleAddFormCard = (evt) => {
 
   const cardName = cardNameInput.value;
   const cardLink = cardLinkInput.value;
-
   const cardInfo = {
     name: cardName,
     link: cardLink,
   };
 
-  // Вызов API-запроса для добавления новой карточки
-  fetchAddNewCard(cardInfo)
-    .then((newCardData) => {
-      if (newCardData) {
+  // Получение данных о пользователе и добавление их в новую карточку
+  Promise.all([fetchGetUserInformation(), fetchAddNewCard(cardInfo)])
+    .then(([userData, newCardData]) => {
+      if (userData._id && newCardData) {
         const place = createCard(
           newCardData,
           likeCard,
           openImageCard,
-          deleteCard
+          userData
         );
         sectionPlaces.prepend(place);
         cardForm.reset();
@@ -189,7 +188,7 @@ const inicializationRendering = () => {
   Promise.all([fetchGetUserInformation(), fetchGetCardsInformation()])
     .then(([userData, cardData]) => {
       if (userData._id && Array.isArray(cardData)) {
-        renderInitialCards(cardData, userData);
+        renderInitialCards(userData, cardData);
         renderingProfile(userData);
         renderingUserAvatar(userData);
       } else {
@@ -221,17 +220,15 @@ const renderLoading = (isLoading, button) => {
 };
 
 // @todo: Функция вывода карточки на страницу
-const renderInitialCards = (cardData, userData) => {
-  cardData.forEach((element) => {
-    const cardItem = createCard(
-      element,
-      likeCard,
-      openImageCard,
-      deleteCard,
-      userData
-    );
-    sectionPlaces.append(cardItem);
-  });
+const renderInitialCards = (userData, cardData) => {
+  if (userData && userData._id) {
+    cardData.forEach((element) => {
+      const cardItem = createCard(element, likeCard, openImageCard, userData);
+      sectionPlaces.append(cardItem);
+    });
+  } else {
+    console.error("Invalid user data:", userData);
+  }
 };
 
 // @todo: Вызов функции проверки валидации форм

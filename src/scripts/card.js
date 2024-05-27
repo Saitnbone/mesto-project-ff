@@ -28,26 +28,35 @@ export const likeCard = (evt, cardElement, cardId, cardData, userData) => {
 };
 
 // @todo: Функция удаления лайка карточки
-export const deleteCard = (card) => {
-  card.remove();
-};
-
-// @todo: Функция проверки роли пользователя
-const checkUserRole = (otherUsers, closeButton) => {
-  const otherOwners = otherUsers.owner._id;
-
-  // API-вызов для проверки роли пользователя
-  fetchGetUserInformation()
-    .then((mainUserInformation) => {
-      if (mainUserInformation && mainUserInformation._id === otherOwners) {
-        closeButton.classList.add("card__delete-button_show");
-      } else {
-        closeButton.classList.remove("card__delete-button_show");
+export const deleteCard = (card, cardId) => {
+  // API-вызов взависимости от условия проверки статуса лайка
+  fetchDeleteCardInformation(cardId)
+    .then((res) => {
+      if (res) {
+        card.remove();
       }
     })
     .catch((error) => {
-      console.error("Error getting primary user information : ", error);
+      console.error("Error deleting card:", error);
     });
+};
+
+// @todo: Функция проверки состояния кнопки удаления
+const checkDeleteButtonState = (
+  owner,
+  cardData,
+  cardId,
+  cardElement,
+  deleteButton
+) => {
+  if (owner === cardData.owner._id) {
+    deleteButton.classList.add("card__delete-button_show");
+    deleteButton.addEventListener("click", () => {
+      deleteCard(cardElement, cardId);
+    });
+  } else {
+    deleteButton.classList.remove("card__delete-button_show");
+  }
 };
 
 // @todo: Функция проверки состояния кнопки лайка
@@ -61,18 +70,14 @@ const checkLikeButtonState = (cardData, likeButton, userData) => {
 };
 
 // @todo: Функция создания карточки
-export const createCard = (
-  cardData,
-  likeCard,
-  openImageCard,
-  onDelete,
-  userData
-) => {
+export const createCard = (cardData, likeCard, openImageCard, userData) => {
+  console.log(cardData);
   // Константы для карточек
   const cardLink = cardData.link;
   const cardName = cardData.name;
   const likeCounter = cardData.likes.length;
   const cardId = cardData._id;
+  const owner = userData._id;
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate
     .querySelector(".places__item")
@@ -88,12 +93,12 @@ export const createCard = (
   cardElement.querySelector(".card__like-button-counter").textContent =
     likeCounter;
 
+  // @todo: Вызов функции проверки состояния кнопки удаления
+  checkDeleteButtonState(owner, cardData, cardId, cardElement, deleteButton);
+
   // @todo: Вызов функции проверки состояния кнопки лайка
   checkLikeButtonState(cardData, likeButton, userData);
-
-  // @todo: Вызов функции проверки роли пользователя
-  checkUserRole(cardData, deleteButton);
-
+  
   // Слушатели событий
   cardInformation.addEventListener("click", (evt) => openImageCard(evt));
 
@@ -101,17 +106,5 @@ export const createCard = (
     likeCard(evt, cardElement, cardId, cardData, userData);
   });
 
-  deleteButton.addEventListener("click", () => {
-    // API-вызов для удаления карточки с сервера
-    fetchDeleteCardInformation(cardId)
-      .then((res) => {
-        if (res) {
-          onDelete(cardElement);
-        }
-      })
-      .catch((error) => {
-        console.error("Error deleting card:", error);
-      });
-  });
   return cardElement;
 };
