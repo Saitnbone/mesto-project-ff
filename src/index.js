@@ -3,10 +3,10 @@
                 Настройки для проекта
 --------------------------------------------------------
 */
-// @todo: Импорт стилей для проекта
+// Импорт стилей для проекта
 import "./index.css";
 
-// @todo: Импорт компонентов для проекта
+// Импорт компонентов для проекта
 import {
   fetchGetUserInformation,
   fetchGetCardsInformation,
@@ -14,43 +14,43 @@ import {
   fetchUpdateProfileInformation,
   fetchUpdateUserAvatar,
 } from "./scripts/api";
-import { createCard, likeCard } from "./scripts/card";
+import { createCard } from "./scripts/card";
 import { openPopup, closePopup } from "./scripts/modal";
 import { enableValidation, clearValidation } from "./scripts/validationForms";
 
-// @todo: DOM узлы для форм
+// DOM узлы для форм
 const cardForm = document.querySelector('[name="new-place"]');
 const avatarForm = document.querySelector('[name="edit-avatar"]');
 const profileForm = document.querySelector('[name="edit-profile"]');
 
-// @todo: DOM узлы для cards.js
+// DOM узлы для card.js
 const content = document.querySelector(".content");
 const sectionPlaces = content.querySelector(".places__list");
 const popupImage = document.querySelector(".popup_type_image");
 const image = popupImage.querySelector(".popup__image");
 const caption = document.querySelector(".popup__caption");
 
-// @todo: DOM узлы для cardForm
+// DOM узлы для cardForm
 const cardNameInput = document.querySelector(".popup__input_type_card-name");
 const cardLinkInput = document.querySelector(".popup__input_type_url");
 
-// @todo: DOM узлы для modal
+// DOM узлы для modal
 const editProfilePopup = document.querySelector(".popup_type_edit");
 const addPhotoPopup = document.querySelector(".popup_type_new-card");
-const editButton = content.querySelector(".profile__edit-button");
-const addButton = content.querySelector(".profile__add-button");
 const closeButtons = document.querySelectorAll(".popup__close");
 const popupsOverlay = document.querySelectorAll(".popup");
 
-// @todo: DOM узлы для блока с аватаром
+// DOM узлы для блока с аватаром
 const avatarBlock = document.querySelector(".profile__image-block");
 const userAvatar = avatarBlock.querySelector(".profile__image");
 const avatarFormInput = document.querySelector("#link-avatar");
 const avatarPopup = document.querySelector(".popup_type_edit-avatar");
 
-// @todo: DOM узлы для profileForm
+// DOM узлы для profileForm
 const profileSection = document.querySelector(".profile");
 const profileTitle = profileSection.querySelector(".profile__title");
+const editButton = content.querySelector(".profile__edit-button");
+const addButton = content.querySelector(".profile__add-button");
 const profileDescription = profileSection.querySelector(
   ".profile__description"
 );
@@ -59,7 +59,7 @@ const profileDescriptionInput = profileForm.querySelector(
   ".popup__input_type_description"
 );
 
-// @todo: Объект настроек для валидации форм
+// Объект настроек для валидации форм
 const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
@@ -69,12 +69,12 @@ const validationConfig = {
   errorClass: "popup__input-error_show",
 };
 
-// @todo: Добавление класса анимация для popup
+// Добавление класса анимация для popup
 popupsOverlay.forEach((el) => {
   el.classList.add("popup_is-animated");
 });
 
-// @todo: Функция создания новой карточки
+// Функция создания новой карточки
 const handleAddFormCard = (evt) => {
   evt.preventDefault();
   const cardButton = cardForm.querySelector(".popup__button");
@@ -93,7 +93,6 @@ const handleAddFormCard = (evt) => {
       if (userData._id && newCardData) {
         const place = createCard(
           newCardData,
-          likeCard,
           openImageCard,
           userData
         );
@@ -110,39 +109,44 @@ const handleAddFormCard = (evt) => {
     });
 };
 
-/* @todo: Функция заполенения инпутов формы профиля пользователя
- при открытии формы
-*/
-const addInputsInformation = () => {
+// Функция заполенения инпутов формы профиля пользователя при открытии формы
+const addInputsProfileForm = () => {
   profileTitleInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
   openPopup(editProfilePopup);
 };
 
-// @todo: Функция отправки формы пользователя
+// Функция отправки формы пользователя
 const submitProfileInformation = (evt) => {
   evt.preventDefault();
   const profileButton = profileForm.querySelector(".popup__button");
   const titleValue = profileTitleInput.value;
   const descriptionValue = profileDescriptionInput.value;
-  profileTitle.textContent = titleValue;
-  profileDescription.textContent = descriptionValue;
+
   renderLoading(true, profileButton);
 
-  // Объект обновленной информации о пользователе
   const updatedUserInformation = {
     name: titleValue,
     about: descriptionValue,
   };
 
-  // API-вызов для отправки обновленной информации о пользователе
-  fetchUpdateProfileInformation(updatedUserInformation).finally(() => {
-    renderLoading(false, profileButton);
-  });
-  closePopup(editProfilePopup);
+  fetchUpdateProfileInformation(updatedUserInformation)
+    .then((updatedUserData) => {
+      if (updatedUserData) {
+        profileTitle.textContent = updatedUserData.name;
+        profileDescription.textContent = updatedUserData.about;
+        closePopup(editProfilePopup);
+      }
+    })
+    .catch((error) => {
+      console.error("Error updating profile information:", error);
+    })
+    .finally(() => {
+      renderLoading(false, profileButton);
+    });
 };
 
-// @todo: Функция показа изображения карточки
+// Функция показа изображения карточки
 const openImageCard = (evt) => {
   const place = evt.target.closest(".card");
   const cardImage = place.querySelector(".card__image");
@@ -153,14 +157,14 @@ const openImageCard = (evt) => {
   openPopup(popupImage);
 };
 
-// @todo: Функция закрытия модального окна через нажатие на оверлей страницы
+// Функция закрытия модального окна через нажатие на оверлей страницы
 const closePopupOverlay = (evt) => {
   if (evt.target.classList.contains("popup_is-opened")) {
     closePopup(evt.target);
   }
 };
 
-// @todo: Функция обновления аватара пользователя
+// Функция обновления аватара пользователя
 const updateUserAvatar = (evt) => {
   evt.preventDefault();
   const avatarFormbutton = avatarForm.querySelector(".popup__button");
@@ -183,7 +187,7 @@ const updateUserAvatar = (evt) => {
     });
 };
 
-// @ todo: Функция инициализации рендеринга карточек
+// Функция инициализации рендеринга карточек
 const inicializationRendering = () => {
   Promise.all([fetchGetUserInformation(), fetchGetCardsInformation()])
     .then(([userData, cardData]) => {
@@ -200,30 +204,30 @@ const inicializationRendering = () => {
     });
 };
 
-// @todo: Вызов функции инициализации рендеринга карточек
+// Вызов функции инициализации рендеринга карточек
 inicializationRendering();
 
-// @todo: Функция рендеринга аватара пользователя
+// Функция рендеринга аватара пользователя
 const renderingUserAvatar = (userData) => {
   userAvatar.src = userData.avatar;
 };
 
-// @todo: Функция рендеринга информации о пользователе
+// Функция рендеринга информации о пользователе
 const renderingProfile = (userData) => {
   profileTitle.textContent = userData.name;
   profileDescription.textContent = userData.about;
 };
 
-// @todo: Функция изменения статуса кнопки в формах при отправке результата
+// Функция изменения статуса кнопки в формах при отправке результата
 const renderLoading = (isLoading, button) => {
   button.textContent = isLoading ? "Сохранение..." : "Сохранить";
 };
 
-// @todo: Функция вывода карточки на страницу
+// Функция вывода карточки на страницу
 const renderInitialCards = (userData, cardData) => {
   if (userData && userData._id) {
     cardData.forEach((element) => {
-      const cardItem = createCard(element, likeCard, openImageCard, userData);
+      const cardItem = createCard(element, openImageCard, userData);
       sectionPlaces.append(cardItem);
     });
   } else {
@@ -231,10 +235,10 @@ const renderInitialCards = (userData, cardData) => {
   }
 };
 
-// @todo: Вызов функции проверки валидации форм
+// Вызов функции проверки валидации форм
 enableValidation(validationConfig);
 
-// @todo: Слушатели событий для формы с аватаром пользователя
+// Слушатели событий для формы с аватаром пользователя
 avatarBlock.addEventListener("click", () => {
   openPopup(avatarPopup);
   clearValidation(avatarForm, validationConfig);
@@ -242,17 +246,17 @@ avatarBlock.addEventListener("click", () => {
 
 avatarForm.addEventListener("submit", updateUserAvatar);
 
-// @todo: Слушатели событий для cardForm
+// Слушатели событий для cardForm
 cardForm.addEventListener("submit", handleAddFormCard);
 
-// @todo: Слушатели событий для modal.js
+// Слушатели событий для modal.js
 popupsOverlay.forEach((overlay) => {
   overlay.addEventListener("click", closePopupOverlay);
 });
 
 editButton.addEventListener("click", () => {
-  addInputsInformation();
   clearValidation(profileForm, validationConfig);
+  addInputsProfileForm();
 });
 
 addButton.addEventListener("click", () => {
@@ -267,5 +271,5 @@ closeButtons.forEach((button) => {
   });
 });
 
-// @todo: Слушатели событий для profileForm
+// Слушатели событий для profileForm
 profileForm.addEventListener("submit", submitProfileInformation);

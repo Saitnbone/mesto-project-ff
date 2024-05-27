@@ -1,12 +1,11 @@
 import {
   fetchDeleteCardInformation,
-  fetchGetUserInformation,
   fetchAddLike,
   fetchRemoveLike,
 } from "./api";
 
-// @todo: Функция добавления лайка карточки
-export const likeCard = (evt, cardElement, cardId, cardData, userData) => {
+// Функция добавления лайка карточки
+const likeCard = (evt, cardElement, cardId, cardData, userData) => {
   const like = evt.target;
   const likeCounts = cardElement.querySelector(".card__like-button-counter");
   const checkLikeStatus = cardData.likes.some(
@@ -27,9 +26,9 @@ export const likeCard = (evt, cardElement, cardId, cardData, userData) => {
     });
 };
 
-// @todo: Функция удаления лайка карточки
-export const deleteCard = (card, cardId) => {
-  // API-вызов взависимости от условия проверки статуса лайка
+// Функция удаления карточки
+const deleteCard = (card, cardId) => {
+  // API-вызов для удаления карточки
   fetchDeleteCardInformation(cardId)
     .then((res) => {
       if (res) {
@@ -41,7 +40,7 @@ export const deleteCard = (card, cardId) => {
     });
 };
 
-// @todo: Функция проверки состояния кнопки удаления
+// Функция проверки состояния кнопки удаления
 const checkDeleteButtonState = (
   owner,
   cardData,
@@ -59,7 +58,7 @@ const checkDeleteButtonState = (
   }
 };
 
-// @todo: Функция проверки состояния кнопки лайка
+// Функция проверки состояния кнопки лайка
 const checkLikeButtonState = (cardData, likeButton, userData) => {
   const likeButtonState = cardData.likes.some(
     (user) => user._id === userData._id
@@ -69,9 +68,8 @@ const checkLikeButtonState = (cardData, likeButton, userData) => {
   }
 };
 
-// @todo: Функция создания карточки
-export const createCard = (cardData, likeCard, openImageCard, userData) => {
-  console.log(cardData);
+// Функция создания карточки
+export const createCard = (cardData, openImageCard, userData) => {
   // Константы для карточек
   const cardLink = cardData.link;
   const cardName = cardData.name;
@@ -93,15 +91,12 @@ export const createCard = (cardData, likeCard, openImageCard, userData) => {
   cardElement.querySelector(".card__like-button-counter").textContent =
     likeCounter;
 
-  // @todo: Вызов функции проверки состояния кнопки удаления
+  // Вызовы функций проверки
   checkDeleteButtonState(owner, cardData, cardId, cardElement, deleteButton);
-
-  // @todo: Вызов функции проверки состояния кнопки лайка
   checkLikeButtonState(cardData, likeButton, userData);
-  
+
   // Слушатели событий
   cardInformation.addEventListener("click", (evt) => openImageCard(evt));
-
   likeButton.addEventListener("click", (evt) => {
     likeCard(evt, cardElement, cardId, cardData, userData);
   });

@@ -1,4 +1,4 @@
-// @todo: Функция вывода ошибок валидации форм
+// Функция вывода ошибок валидации форм
 const showInputError = (input, errorValue, settingsObject) => {
   const error = document.querySelector(`.${input.id}-error`);
   error.classList.add(settingsObject.errorClass);
@@ -6,7 +6,7 @@ const showInputError = (input, errorValue, settingsObject) => {
   error.textContent = errorValue;
 };
 
-// @todo: Функция скрытия ошибок валидации форм
+// Функция скрытия ошибок валидации форм
 const hideInputError = (input, settingsObject) => {
   const error = document.querySelector(`.${input.id}-error`);
   error.classList.remove(settingsObject.errorClass);
@@ -15,13 +15,9 @@ const hideInputError = (input, settingsObject) => {
   input.setCustomValidity("");
 };
 
-// @todo: Функция проверки валидности инпутов в формах
+// Функция проверки валидности инпутов в формах
 const checkValidity = (input, settingsObject) => {
-  if (input.validity.valueMissing) {
-    input.setCustomValidity("Вы пропустили это поле.");
-  } else if (input.validity.typeMismatch) {
-    input.setCustomValidity(input.dataset.typeErrorMessage);
-  } else if (input.validity.patternMismatch) {
+  if (input.validity.patternMismatch) {
     input.setCustomValidity(input.dataset.errorMessage);
   } else {
     input.setCustomValidity("");
@@ -34,7 +30,7 @@ const checkValidity = (input, settingsObject) => {
   }
 };
 
-// @todo: Функция добавления слушателей инпутов форм
+// Функция добавления слушателей инпутов форм
 const setEventListeners = (form, settingsObject) => {
   const inputList = Array.from(
     form.querySelectorAll(settingsObject.inputSelector)
@@ -50,7 +46,7 @@ const setEventListeners = (form, settingsObject) => {
   });
 };
 
-// @todo: Функция инициализации проверки инпутов форм
+// Функция инициализации проверки инпутов форм
 export const enableValidation = (settingsObject) => {
   const formList = Array.from(
     document.querySelectorAll(settingsObject.formSelector)
@@ -63,7 +59,7 @@ export const enableValidation = (settingsObject) => {
   });
 };
 
-// @todo: Функция очистки валидации форм
+// Функция очистки валидации форм
 export const clearValidation = (form, settingsObject) => {
   const inputList = Array.from(
     form.querySelectorAll(settingsObject.inputSelector)
@@ -74,19 +70,22 @@ export const clearValidation = (form, settingsObject) => {
     hideInputError(inputElement, settingsObject);
   });
 
+  form.reset();
   toggleButtonsState(inputList, buttonElement, settingsObject);
 };
 
-// @todo: Функция проверки наличия невалидных инпутов
+// Функция проверки наличия невалидных инпутов
 const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => !inputElement.validity.valid);
 };
 
-// @todo: Функция переключения состояния кнопок в формах
+// Функция переключения состояния кнопок в формах
 const toggleButtonsState = (inputList, buttonElement, settingsObject) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.classList.add(settingsObject.inactiveButtonClass);
+    buttonElement.disabled = true;
   } else {
     buttonElement.classList.remove(settingsObject.inactiveButtonClass);
+    buttonElement.disabled = false;
   }
 };

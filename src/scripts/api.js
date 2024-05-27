@@ -1,4 +1,4 @@
-// @todo: Объект конфигурации для API-запросов
+// Объект конфигурации для API-запросов
 const config = {
   getMethod: "GET",
   postMethod: "POST",
@@ -18,41 +18,33 @@ const config = {
   },
 };
 
-// @todo: API-запрос для получения собственной информации
+// API-запрос для получения собственной информации
 export const fetchGetUserInformation = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: config.getMethod,
-    headers: {
-      authorization: config.headers.authorization,
-    },
+    headers: config.headers,
   }).then(config.handleResponse);
 };
 
-// @todo: API-запрос для изменения данных о пользователе
+// API-запрос для изменения данных о пользователе
 export const fetchUpdateProfileInformation = (updatedInformation) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: config.patchMethod,
     headers: config.headers,
-    body: JSON.stringify({
-      name: updatedInformation.name,
-      about: updatedInformation.about,
-    }),
+    body: JSON.stringify(updatedInformation),
   }).then(config.handleResponse);
 };
 
-// @todo: API-запрос для добавления новой карточки
+// API-запрос для добавления новой карточки
 export const fetchAddNewCard = (newCardData) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: config.postMethod,
     headers: config.headers,
-    body: JSON.stringify({
-      name: newCardData.name,
-      link: newCardData.link,
-    }),
+    body: JSON.stringify(newCardData),
   }).then(config.handleResponse);
 };
 
-// @todo: API-запрос для получения информации о карточках
+// API-запрос для получения информации о карточках
 export const fetchGetCardsInformation = () => {
   return fetch(`${config.baseUrl}/cards`, {
     method: config.getMethod,
@@ -60,7 +52,7 @@ export const fetchGetCardsInformation = () => {
   }).then(config.handleResponse);
 };
 
-// @todo: API-запрос для получения информации о карточках
+// API-запрос для удаления информации о карточках
 export const fetchDeleteCardInformation = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: config.deleteMethod,
@@ -68,7 +60,7 @@ export const fetchDeleteCardInformation = (cardId) => {
   }).then(config.handleResponse);
 };
 
-// @todo: API-запрос для добавления лайка карточки
+// API-запрос для добавления лайка карточки
 export const fetchAddLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: config.putMethod,
@@ -76,7 +68,7 @@ export const fetchAddLike = (cardId) => {
   }).then(config.handleResponse);
 };
 
-// @todo: API-запрос для удаления лайка карточки
+// API-запрос для удаления лайка карточки
 export const fetchRemoveLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: config.deleteMethod,
@@ -84,12 +76,11 @@ export const fetchRemoveLike = (cardId) => {
   }).then(config.handleResponse);
 };
 
-export const fetchUpdateUserAvatar = (image) => {
+// API-запрос для обновления аватара пользователя
+export const fetchUpdateUserAvatar = (avatar) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: config.patchMethod,
     headers: config.headers,
-    body: JSON.stringify({
-      avatar: image,
-    }),
+    body: JSON.stringify(avatar),
   }).then(config.handleResponse);
 };
